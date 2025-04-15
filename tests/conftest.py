@@ -14,10 +14,10 @@ def spark():
     session = SparkSession.builder \
         .appName("pytest-local-spark-testing") \
         .master("local[2]")\
-        .config("spark.sql.shuffle.partitions", "1") \
+        .config("spark.sql.shuffle.partitions", "1")\
         .config("spark.driver.memory", "512m")\
         .config("spark.executor.memory", "512m")\
-        .config("spark.ui.enabled", "false") \
+        .config("spark.ui.enabled", "false")\
         .getOrCreate()
     yield session
     session.stop()
