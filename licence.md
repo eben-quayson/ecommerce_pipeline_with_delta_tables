@@ -8,7 +8,7 @@ This project is licensed under the MIT License. This is a very permissive open-s
 
 **Key Permissions:**
 
-* **Commercial Use:** You can use the software for commercial purposes.
+* **Commercial Use:** You can use the software for commercial purposes. 
 * **Modification:** You can modify the software to fit your needs.
 * **Distribution:** You can distribute the software, including modified versions.
 * **Private Use:** You can use the software privately.
