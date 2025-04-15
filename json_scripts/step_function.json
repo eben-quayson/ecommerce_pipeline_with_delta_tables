@@ -1,0 +1,111 @@
+{
+    "Comment": "A description of my state machine",
+    "StartAt": "Glue StartJobRun - orders",
+    "States": {
+      "Glue StartJobRun - orders": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "ecommerce_delta",
+          "Arguments": {
+            "--dataset_type": "orders",
+            "--input_path": "s3://ecom-bucket-gyenyame/raw/orders/*.csv",
+            "--target_path": "s3://ecom-bucket-gyenyame/processed/orders/",
+            "--rejected_path": "s3://ecom-bucket-gyenyame/rejected/orders/"
+          }
+        },
+        "Next": "Glue StartJobRun - order_items",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "SNS Publish Failure - orders"
+          }
+        ]
+      },
+      "Glue StartJobRun - order_items": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "ecommerce_delta",
+          "Arguments": {
+            "--dataset_type": "order_items",
+            "--input_path": "s3://ecom-bucket-gyenyame/raw/order_items/*.csv",
+            "--target_path": "s3://ecom-bucket-gyenyame/processed/order_items/",
+            "--rejected_path": "s3://ecom-bucket-gyenyame/rejected/order_items/"
+          }
+        },
+        "Next": "Glue StartJobRun - products",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "SNS Publish Failure - order_items"
+          }
+        ]
+      },
+      "Glue StartJobRun - products": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "ecommerce_delta",
+          "Arguments": {
+            "--dataset_type": "products",
+            "--input_path": "s3://ecom-bucket-gyenyame/raw/products/*.csv",
+            "--target_path": "s3://ecom-bucket-gyenyame/processed/products/",
+            "--rejected_path": "s3://ecom-bucket-gyenyame/rejected/products/"
+          }
+        },
+        "Next": "SNS Publish Success",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "SNS Publish Failure - products"
+          }
+        ]
+      },
+      "SNS Publish Success": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "TopicArn": "arn:aws:sns:eu-west-1:182399707265:ecom_topic",
+          "Message": {
+            "Input.$": "$",
+            "Message": "Success! Data Successfully Processed"
+          }
+        },
+        "End": true
+      },
+      "SNS Publish Failure - orders": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "TopicArn": "arn:aws:sns:eu-west-1:182399707265:ecom_topic",
+          "Message": "Glue Job Failed: orders"
+        },
+        "End": true
+      },
+      "SNS Publish Failure - order_items": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "TopicArn": "arn:aws:sns:eu-west-1:182399707265:ecom_topic",
+          "Message": "Glue Job Failed: order_items"
+        },
+        "End": true
+      },
+      "SNS Publish Failure - products": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "TopicArn": "arn:aws:sns:eu-west-1:182399707265:ecom_topic",
+          "Message": "Glue Job Failed: products"
+        },
+        "End": true
+      }
+    }
+  }

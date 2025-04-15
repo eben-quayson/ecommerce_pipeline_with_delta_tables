@@ -1,8 +1,3 @@
-Sure! Here’s a comprehensive `README.md` file for your **AWS Glue Delta Lake Ingestion Pipeline** project. This version is structured to reflect professional open-source documentation style, with clear sections for purpose, usage, architecture, features, and setup instructions.
-
----
-
-```markdown
 # 🚀 AWS Glue Delta Lake Ingestion Pipeline
 
 A scalable, schema-evolving data ingestion pipeline that processes raw CSV data from Amazon S3, performs validation, transformation, deduplication, and metadata enrichment, and ingests it into Delta Lake tables using AWS Glue and PySpark.
