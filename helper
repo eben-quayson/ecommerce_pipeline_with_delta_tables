@@ -1,0 +1,47 @@
+graph LR
+    subgraph "Data Sources (External)"
+        A[E-commerce Platform] --> B(CSVs);
+    end
+
+    subgraph "AWS Cloud"
+        subgraph "Ingestion & Raw Zone"
+            B --> C{S3 Raw Zone Bucket};
+            C -- S3 Event Notification --> D[SQS Queue];
+            D --> E[Lambda Trigger];
+        end
+
+        subgraph "Orchestration & Processing"
+            E -- Starts Execution --> F[AWS Step Functions State Machine];
+            F -- Triggers Job --> G(AWS Glue Job - Spark + Delta Lake);
+            G -- Reads From --> C;
+            G -- Writes/Merges To --> H{S3 Processed Zone Bucket (Delta Tables)};
+            G -- Writes Logs --> I[S3 Logs/Rejected Zone];
+            F -- Updates --> J(AWS Glue Data Catalog);
+            F -- Archives --> K{S3 Archive Zone};
+            F -- Logs Errors --> L[CloudWatch Logs / SNS Alert];
+        end
+
+        subgraph "Metadata & Querying"
+            H -- Registered In --> J;
+            J -- Queried By --> M[Amazon Athena];
+            M -- Reads Data From --> H;
+        end
+
+        subgraph "CI/CD"
+           N[GitHub Repository] -- Push to main --> O(GitHub Actions);
+           O -- Deploys --> P(Glue Job Scripts to S3);
+           O -- Deploys --> Q(Step Function Definition);
+        end
+
+        M --> R[Analytics Users/Dashboards];
+    end
+
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style K fill:#eee,stroke:#333,stroke-width:2px
+    style I fill:#fcc,stroke:#333,stroke-width:2px
+    style G fill:#FFD700,stroke:#333,stroke-width:2px
+    style F fill:#FFA500,stroke:#333,stroke-width:2px
+    style M fill:#ADD8E6,stroke:#333,stroke-width:2px
+    style J fill:#90EE90,stroke:#333,stroke-width:2px
+    style O fill:#B0C4DE,stroke:#333,stroke-width:2px
