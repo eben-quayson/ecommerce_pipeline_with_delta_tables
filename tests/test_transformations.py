@@ -4,7 +4,7 @@ from decimal import Decimal
 import os
 import sys
 from pyspark.sql import SparkSession, Row
-from pyspark.sql.functions import col, lit, to_timestamp, current_timestamp, when, date_format, De
+from pyspark.sql.functions import col, lit, to_timestamp, current_timestamp, when, date_format
 from pyspark.sql.types import (
     StructType, StructField, StringType, IntegerType, DecimalType,
     TimestampType, BooleanType, DateType, DoubleType
