@@ -1,7 +1,7 @@
 name: Deploy AWS Glue Job
 
 on:
-  push:
+  pull_request:
     branches:
       - main  
 
