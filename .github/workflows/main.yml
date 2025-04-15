@@ -25,7 +25,7 @@ jobs:
           aws-region: eu-west-1
 
       - name: Upload Glue Script to S3
-        run: aws s3 cp ./transformation_scripts/transformation.py s3://aws-glue-assets-182399707265-eu-west-1/scripts/
+        run: aws s3 cp ./transformation_scripts/transformations.py s3://aws-glue-assets-182399707265-eu-west-1/scripts/
 
       - name: Invoke Lambda to Update Glue Job
         run: aws lambda invoke --function-name resetGlueScript --payload '{}' response.json
