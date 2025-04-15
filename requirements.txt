@@ -1,0 +1,7 @@
+pandas
+pyspark
+boto3
+pyarrow
+fastparquet
+pytest
+pytest-cov

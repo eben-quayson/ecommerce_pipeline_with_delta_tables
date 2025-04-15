@@ -1,5 +1,8 @@
 import sys
 import logging 
+import boto3
+import os
+from urllib.parse import urlparse
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -322,6 +325,41 @@ except Exception as e:
     logger.error(f"Error processing data for {target_path}: {str(e)}", exc_info=True) # Log traceback
     # Re-raise the exception so Glue/Step Functions mark the job as failed
     raise e
+
+# --- 9. Archive processed files ---
+logger.info("Archiving processed files...")
+
+def move_files_to_archive(source_path, archive_path):
+    s3 = boto3.resource('s3')
+
+    parsed_source = urlparse(source_path)
+    parsed_archive = urlparse(archive_path)
+
+    source_bucket = parsed_source.netloc
+    source_prefix = parsed_source.path.lstrip('/')
+
+    archive_bucket = parsed_archive.netloc
+    archive_prefix = parsed_archive.path.lstrip('/')
+
+    source_bucket_obj = s3.Bucket(source_bucket)
+    for obj_summary in source_bucket_obj.objects.filter(Prefix=source_prefix):
+        source_key = obj_summary.key
+        if not source_key.endswith("/"):  # Ignore folder placeholders
+            archive_key = os.path.join(archive_prefix, os.path.basename(source_key))
+            logger.info(f"Moving {source_key} to {archive_key}")
+            # Copy to archive
+            s3.Object(archive_bucket, archive_key).copy_from(CopySource={'Bucket': source_bucket, 'Key': source_key})
+            # Delete original
+            s3.Object(source_bucket, source_key).delete()
+            logger.info(f"Archived and deleted: {source_key}")
+
+try:
+    archive_path = source_path.replace("/raw/", "/archive/")  # Assumes 'raw' in path, change as needed
+    move_files_to_archive(source_path, archive_path)
+    logger.info(f"Successfully archived files from {source_path} to {archive_path}")
+except Exception as e:
+    logger.error(f"Error archiving files from {source_path}: {str(e)}")
+
 
 # --- Job Commit ---
 logger.info("Committing Glue job.")
