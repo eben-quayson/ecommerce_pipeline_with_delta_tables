@@ -1,12 +1,34 @@
 # test_transformation.py
 import pytest
+from decimal import Decimal
+import os
+import sys
 from pyspark.sql import SparkSession, Row
-from pyspark.sql.functions import col, lit, to_timestamp, current_timestamp, when, date_format
+from pyspark.sql.functions import col, lit, to_timestamp, current_timestamp, when, date_format, De
 from pyspark.sql.types import (
     StructType, StructField, StringType, IntegerType, DecimalType,
     TimestampType, BooleanType, DateType, DoubleType
 )
 from datetime import datetime, date
+import logging
+
+logging.getLogger('py4j').setLevel(logging.ERROR)
+logging.getLogger('pyspark').setLevel(logging.ERROR)
+
+
+@pytest.fixture(scope="session")
+def spark():
+    """Provides a Spark session for the test suite."""
+    session = SparkSession.builder \
+        .appName("pytest-local-spark-testing") \
+        .master("local[2]")\
+        .config("spark.sql.shuffle.partitions", "1") \
+        .config("spark.driver.memory", "512m")\
+        .config("spark.executor.memory", "512m")\
+        .config("spark.ui.enabled", "false") \
+        .getOrCreate()
+    yield session
+    session.stop()
 
 # --- Redefined Helper Functions (based on the provided script) ---
 def get_schema_for_dataset(dataset_type):
