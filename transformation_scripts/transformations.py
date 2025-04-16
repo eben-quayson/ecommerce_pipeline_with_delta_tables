@@ -27,7 +27,7 @@ logger.info("Starting Glue job...")
 
 # --- Job Parameters ---
 ## @params: [JOB_NAME]
-if __name__ == "__main__" and modules_available == True:
+if modules_available == True:
     args = getResolvedOptions(sys.argv, [
         'JOB_NAME',
         'dataset_type',
