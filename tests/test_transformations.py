@@ -111,7 +111,7 @@ def test_metadata_enrichment(spark):
         
     ])
 
-    data = [("1", "u1", datetime.now(), datetime.now())]
+    data = [("1", "u1", datetime.now())]
     df = spark.createDataFrame(data, schema=schema)
 
     enriched_df = df \
@@ -130,9 +130,9 @@ def test_deduplication_logic(spark):
     ])
 
     data = [
-        ("1", "u1", datetime.now(), datetime.now()),
-        ("1", "u1", datetime.now(), datetime.now()),  # duplicate based on order_id
-        ("2", "u2", datetime.now(), datetime.now())
+        ("1", "u1", datetime.now()),
+        ("1", "u1", datetime.now()),  # duplicate based on order_id
+        ("2", "u2", datetime.now())
     ]
     
     df = spark.createDataFrame(data, schema=schema)
