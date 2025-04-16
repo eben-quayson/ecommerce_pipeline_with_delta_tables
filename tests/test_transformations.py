@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
 from decimal import Decimal
-from transformations import transform_dataset, apply_validation
+from transformation_scripts.transformations import transform_dataset, apply_validation
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
 
