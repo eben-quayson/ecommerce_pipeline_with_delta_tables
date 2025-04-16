@@ -44,9 +44,9 @@ if modules_available == True:
 else:
     # Mock parameters for local testing
     dataset_type = 'orders'
-    source_path = 's3://your-bucket/raw/orders.csv'
-    target_path = 's3://your-bucket/target/orders'
-    rejected_path = 's3://your-bucket/rejected/orders'
+    source_path = 'mock_data/source/'
+    target_path = 'mock_data/target/'
+    rejected_path = 'mock_data/rejected/'
     job_name = 'test_job'
 
 
