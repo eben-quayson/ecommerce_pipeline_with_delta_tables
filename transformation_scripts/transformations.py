@@ -3,18 +3,18 @@ import logging
 import boto3
 import os
 from urllib.parse import urlparse
+from pyspark.sql import SparkSession
+from pyspark.context import SparkContext
+from pyspark.sql.functions import col, to_timestamp, date_format, lit, input_file_name, current_timestamp, when, to_date
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DecimalType, TimestampType, BooleanType, DateType
 
 # --- Importing necessary libraries ---
 # Note: The following import statements are wrapped in a try-except block to handle environments where AWS Glue libraries are not available (e.g., local testing).
 try:
     from awsglue.transforms import *
     from awsglue.utils import getResolvedOptions
-    from pyspark.context import SparkContext
     from awsglue.context import GlueContext
     from awsglue.job import Job
-    from pyspark.sql import SparkSession
-    from pyspark.sql.functions import col, to_timestamp, date_format, lit, input_file_name, current_timestamp, when, to_date
-    from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DecimalType, TimestampType, BooleanType, DateType
     from delta.tables import DeltaTable
     modules_available = True
 except ImportError as e:
@@ -49,7 +49,7 @@ else:
     rejected_path = 's3://your-bucket/rejected/orders'
     job_name = 'test_job'
 
-    
+
 
 logger.info(f"Job Name: {job_name}")
 logger.info(f"Dataset Type: {dataset_type}")
