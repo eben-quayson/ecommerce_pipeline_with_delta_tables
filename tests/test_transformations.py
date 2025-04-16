@@ -6,13 +6,25 @@ import os
 import sys
 import types
 
-
 # Mocking the awsglue modules to avoid import errors during testing
 @pytest.fixture(autouse=True, scope="session")
 def mock_awsglue_modules():
+    import types
+    import sys
+
+    # Mock the awsglue.utils module
     sys.modules['awsglue'] = types.SimpleNamespace()
     sys.modules['awsglue.transforms'] = types.SimpleNamespace()
     sys.modules['awsglue.utils'] = types.SimpleNamespace()
+
+    # Mock the getResolvedOptions function
+    def mock_getResolvedOptions(argv, options):
+        # Return a dictionary with default values for the required options
+        return {option: f"mock_value_for_{option}" for option in options}
+
+    sys.modules['awsglue.utils'].getResolvedOptions = mock_getResolvedOptions
+
+
 
 # Add the parent directory to the system path to import the transformation scripts
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
