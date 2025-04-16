@@ -41,14 +41,6 @@ if modules_available == True:
     target_path = args['target_path']
     rejected_path = args['rejected_path']
     job_name = args['JOB_NAME']
-else:
-    # Mock parameters for local testing
-    dataset_type = 'orders'
-    source_path = './mock_data/source/'
-    target_path = './mock_data/target/'
-    rejected_path = './mock_data/rejected/'
-    job_name = 'test_job'
-
 
 
 logger.info(f"Job Name: {job_name}")

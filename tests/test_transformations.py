@@ -30,6 +30,14 @@ def mock_awsglue_modules():
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
+# Mock parameters for local testing
+dataset_type = 'orders'
+source_path = './mock_data/source/'
+target_path = './mock_data/target/'
+rejected_path = './mock_data/rejected/'
+job_name = 'test_job'
+
+
 from transformation_scripts.transformations import (
     get_schema_for_dataset,
     get_required_cols,
