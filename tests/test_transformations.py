@@ -98,7 +98,7 @@ def test_orders_schema_and_validation(spark):
     assert null_required.count() == 1
 
     # Timestamp check
-    df = df.withColumn("created_at", df["order_date"].cast(TimestampType()))
+    df = df.withColumn("created_at", df["order_timestamp_str"].cast(TimestampType()))
     invalid_timestamps = df.filter("created_at IS NULL")
     assert invalid_timestamps.count() == 1
 
