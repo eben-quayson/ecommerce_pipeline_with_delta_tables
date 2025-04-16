@@ -62,12 +62,13 @@ def test_get_required_cols_orders():
     assert get_required_cols("orders") == ["order_id", "user_id"]
 
 def test_get_partition_column_orders():
-    assert get_partition_column("orders") == "created_at"
+    assert get_partition_column("orders") == "order_date"
 
 def test_get_final_columns_order_items():
     assert get_final_columns("order_items") == [
-        "order_item_id", "order_id", "user_id", "product_id", "quantity",
-        "is_gift", "created_at", "updated_at", "ingestion_timestamp", "source_file"
+         "order_item_id", "order_id", "user_id", "product_id", "add_to_cart_order",
+        "reordered", "order_timestamp", "order_date", "days_since_prior_order",
+        "_ingestion_timestamp_utc", "_source_file"
     ]
 
 
@@ -79,9 +80,9 @@ def test_orders_schema_and_validation(spark):
     schema = get_schema_for_dataset("orders")
     
     data = [
-        ("1", "u1", "2024-01-01 10:00:00", "2024-01-01 11:00:00"),  # valid
-        ("2", None, "2024-01-02 10:00:00", "2024-01-02 11:00:00"),  # missing required col (user_id)
-        ("3", "u3", None, "2024-01-03 11:00:00"),                   # missing timestamp col
+           ("1", "u1", "2024-01-01 09:00:00", "2024-01-01", "2024-01-01 10:00:00", "2024-01-01 11:00:00"),
+           ("2", None, "2024-01-02 09:00:00", "2024-01-02", "2024-01-02 10:00:00", "2024-01-02 11:00:00"),
+           ("3", "u3", None, None, "2024-01-03 10:00:00", "2024-01-03 11:00:00"),
     ]
     
     df = spark.createDataFrame(data, schema=schema)
