@@ -59,12 +59,13 @@ logger.info(f"Rejected Path: {rejected_path}")
 
 
 # --- Glue and Spark Context Initialization ---
-sc = SparkContext()
-glueContext = GlueContext(sc)
-spark = glueContext.spark_session
-job = Job(glueContext)
-job.init(job_name, args)
-logger.info("Glue and Spark contexts initialized.")
+if modules_available == True:
+    sc = SparkContext()
+    glueContext = GlueContext(sc)
+    spark = glueContext.spark_session
+    job = Job(glueContext)
+    job.init(job_name, args)
+    logger.info("Glue and Spark contexts initialized.")
 
 
 # --- Helper functions ---
