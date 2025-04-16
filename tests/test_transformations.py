@@ -115,7 +115,7 @@ def test_metadata_enrichment(spark):
     df = spark.createDataFrame(data, schema=schema)
 
     enriched_df = df \
-        .withColumn("ingestion_timestamp", df["created_at"]) \
+        .withColumn("ingestion_timestamp", df["order_date"]) \
         .withColumn("source_file", df["user_id"])  # Just mocking enrichment
 
     assert "ingestion_timestamp" in enriched_df.columns
