@@ -27,13 +27,14 @@ logger.info("Starting Glue job...")
 
 # --- Job Parameters ---
 ## @params: [JOB_NAME]
-args = getResolvedOptions(sys.argv, [
-    'JOB_NAME',
-    'dataset_type',
-    'source_path',
-    'target_path',
-    'rejected_path'
-])
+if __name__ == "__main__" and modules_available:
+    args = getResolvedOptions(sys.argv, [
+        'JOB_NAME',
+        'dataset_type',
+        'source_path',
+        'target_path',
+        'rejected_path' 
+    ])
 
 dataset_type = args['dataset_type']
 source_path = args['source_path']
