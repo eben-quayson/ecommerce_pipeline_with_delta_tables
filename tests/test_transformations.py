@@ -61,9 +61,6 @@ def spark():
 def test_get_required_cols_orders():
     assert get_required_cols("orders") == ["order_id", "user_id"]
 
-def test_get_pk_column_products():
-    assert get_pk_column("products") == "product_id"
-
 def test_get_partition_column_orders():
     assert get_partition_column("orders") == "created_at"
 

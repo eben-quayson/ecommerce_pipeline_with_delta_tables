@@ -52,9 +52,9 @@ if modules_available == True:
 else:
     # Local testing parameters
     dataset_type = 'orders'
-    source_path = 'default_source_path'
-    target_path = 'default_target_path'
-    rejected_path = 'default_rejected_path'
+    source_path = 'mock_data/source/*csv'
+    target_path = 'mock_data/target/'
+    rejected_path = 'mock_data/rejected/'
     job_name = 'test_job'
     # Local path for testing
 
