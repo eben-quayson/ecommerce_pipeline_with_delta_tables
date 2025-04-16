@@ -98,8 +98,7 @@ def test_orders_schema_and_validation(spark):
     assert null_required.count() == 1
 
     # Timestamp check
-    df = df.withColumn("created_at", df["created_at"].cast(TimestampType()))
-    df = df.withColumn("updated_at", df["updated_at"].cast(TimestampType()))
+    df = df.withColumn("created_at", df["order_date"].cast(TimestampType()))
     invalid_timestamps = df.filter("created_at IS NULL")
     assert invalid_timestamps.count() == 1
 
@@ -108,8 +107,8 @@ def test_metadata_enrichment(spark):
     schema = StructType([
         StructField("order_id", StringType(), True),
         StructField("user_id", StringType(), True),
-        StructField("created_at", TimestampType(), True),
-        StructField("updated_at", TimestampType(), True)
+        StructField("order_date", TimestampType(), True),
+        
     ])
 
     data = [("1", "u1", datetime.now(), datetime.now())]
@@ -127,8 +126,7 @@ def test_deduplication_logic(spark):
     schema = StructType([
         StructField("order_id", StringType(), True),
         StructField("user_id", StringType(), True),
-        StructField("created_at", TimestampType(), True),
-        StructField("updated_at", TimestampType(), True)
+        StructField("order_date", TimestampType(), True),
     ])
 
     data = [
