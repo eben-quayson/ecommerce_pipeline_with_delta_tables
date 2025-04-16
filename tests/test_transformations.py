@@ -4,6 +4,15 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 from datetime import datetime
 import os
 import sys
+import types
+
+
+# Mocking the awsglue modules to avoid import errors during testing
+@pytest.fixture(autouse=True, scope="session")
+def mock_awsglue_modules():
+    sys.modules['awsglue'] = types.SimpleNamespace()
+    sys.modules['awsglue.transforms'] = types.SimpleNamespace()
+    sys.modules['awsglue.utils'] = types.SimpleNamespace()
 
 # Add the parent directory to the system path to import the transformation scripts
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
