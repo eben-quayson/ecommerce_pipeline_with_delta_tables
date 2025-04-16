@@ -52,6 +52,11 @@ if modules_available == True:
 else:
     # Local testing parameters
     dataset_type = 'orders'
+    source_path = 'default_source_path'
+    target_path = 'default_target_path'
+    rejected_path = 'default_rejected_path'
+    job_name = 'test_job'
+    # Local path for testing
 
 
 # --- Glue and Spark Context Initialization ---
