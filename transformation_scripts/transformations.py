@@ -49,6 +49,10 @@ if modules_available == True:
     logger.info(f"Target Path: {target_path}")
     logger.info(f"Rejected Path: {rejected_path}")
 
+else:
+    # Local testing parameters
+    dataset_type = 'orders'
+
 
 # --- Glue and Spark Context Initialization ---
 if modules_available == True:
