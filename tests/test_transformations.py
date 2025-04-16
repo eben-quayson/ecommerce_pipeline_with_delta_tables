@@ -4,7 +4,11 @@ from decimal import Decimal
 from transformation_scripts.transformations import transform_dataset, apply_validation
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
+import os
+import sys
 
+#import modules from transformation_scripts
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 @pytest.fixture(scope="module")
 def spark():
