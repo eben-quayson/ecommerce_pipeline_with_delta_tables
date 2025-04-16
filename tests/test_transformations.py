@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import sys
 import types
+from decimal import Decimal
 
 # Mocking the awsglue modules to avoid import errors during testing
 @pytest.fixture(autouse=True, scope="session")
@@ -80,9 +81,9 @@ def test_orders_schema_and_validation(spark):
     schema = get_schema_for_dataset("orders")
     
     data = [
-           ("1", "u1", "2024-01-01 09:00:00", "2024-01-01", "2024-01-01 10:00:00", "2024-01-01 11:00:00"),
-           ("2", None, "2024-01-02 09:00:00", "2024-01-02", "2024-01-02 10:00:00", "2024-01-02 11:00:00"),
-           ("3", "u3", None, None, "2024-01-03 10:00:00", "2024-01-03 11:00:00"),
+        ("1", "o1", "u1", "2024-01-01 09:00:00", Decimal("100.00"), "2024-01-01"),
+        ("2", "o2", None, "2024-01-02 09:00:00", Decimal("150.50"), "2024-01-02"),
+        ("3", "o3", "u3", None, Decimal("200.25"), "2024-01-03"),
     ]
     
     df = spark.createDataFrame(data, schema=schema)
