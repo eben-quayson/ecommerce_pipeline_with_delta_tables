@@ -43,11 +43,11 @@ if modules_available == True:
     job_name = args['JOB_NAME']
 
 
-logger.info(f"Job Name: {job_name}")
-logger.info(f"Dataset Type: {dataset_type}")
-logger.info(f"Source Path: {source_path}")
-logger.info(f"Target Path: {target_path}")
-logger.info(f"Rejected Path: {rejected_path}")
+    logger.info(f"Job Name: {job_name}")
+    logger.info(f"Dataset Type: {dataset_type}")
+    logger.info(f"Source Path: {source_path}")
+    logger.info(f"Target Path: {target_path}")
+    logger.info(f"Rejected Path: {rejected_path}")
 
 
 # --- Glue and Spark Context Initialization ---
